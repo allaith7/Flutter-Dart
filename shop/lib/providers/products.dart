@@ -10,7 +10,6 @@ import './product.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [];
-  // var _showFavoritesOnly = false;
   
   final String? authToken;
   final String? userId;
@@ -18,9 +17,6 @@ class Products with ChangeNotifier {
   Products(this.authToken, this.userId, this._items);
 
   List<Product> get items {
-    // if (_showFavoritesOnly) {
-    //   return _items.where((prodItem) => prodItem.isFavorite).toList();
-    // }
     return [..._items];
   }
 
@@ -32,15 +28,7 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  // void showFavoritesOnly() {
-  //   _showFavoritesOnly = true;
-  //   notifyListeners();
-  // }
 
-  // void showAll() {
-  //   _showFavoritesOnly = false;
-  //   notifyListeners();
-  // }
 
   Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
     
@@ -48,7 +36,7 @@ class Products with ChangeNotifier {
     
     var url = 'https://shopapp-6740d-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterString';//';
 
-  //  try {
+    try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if (extractedData == null) {
@@ -71,16 +59,16 @@ class Products with ChangeNotifier {
           imageUrl: prodData['imageUrl'],
         ));
       });
-     // print(favoriteData);
-     // print(userId);
-     //print(extractedData);
+      print(favoriteData);
+      print(userId);
+     print(extractedData);
 
       _items = loadedProducts;
       notifyListeners();
-   // } catch (error) {
-   //   print(error);
-   //   throw (error);
-   // }
+    } catch (error) {
+      print(error);
+      throw (error);
+    }
     
   }
 
